@@ -1,0 +1,20 @@
+name: Deploy to FTP Server
+on:
+  push:
+    branches:
+      - master
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.1.0
+      with:
+        fetch-depth: 2
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@3.1.0
+      with:
+        ftp-server: ftp.dlptest.com
+        ftp-username: dlpuser@dlptest.com
+        ftp-password: SzMf7rTE4pCrf9dV286GuNe4N
+        git-ftp-args: --remote-root public_html
