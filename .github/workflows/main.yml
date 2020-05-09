@@ -1,20 +1,30 @@
-name: Deploy to FTP Server
+name: Build Website and Deploy to Server
 on:
   push:
     branches:
       - master
 jobs:
-  FTP-Deploy-Action:
-    name: FTP-Deploy-Action
+  Build-And-Deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.1.0
-      with:
-        fetch-depth: 2
-    - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@3.1.0
-      with:
-        ftp-server: ftp.dlptest.com
-        ftp-username: dlpuser@dlptest.com
-        ftp-password: SzMf7rTE4pCrf9dV286GuNe4N
-        git-ftp-args: --remote-root public_html
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: List Root Directory
+        run: ls -al        
+      - name: Create Deploy Folder
+        run: mkdir deploy
+      - name: Copy Index to Deploy
+        run: cp index.html deploy/index.html
+      - name: Copy Assets to Deploy
+        run: cp -r assets deploy/.          
+      - name: List Deployment directory
+        run: ls -R deploy    
+      - name: FTP-Deploy-Action
+        uses: SamKirkland/FTP-Deploy-Action@3.1.0
+        with:
+          ftp-server: ftp.dlptest.com
+          ftp-username: dlpuser@dlptest.com
+          ftp-password: SzMf7rTE4pCrf9dV286GuNe4N
+          local-dir: deploy/
+          git-ftp-args: --remote-root public_html
